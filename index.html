@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Plagiarism Detect</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0d0d0d;
+      color: white;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color:#ffffff;
+    }
+
+    .logo span {
+      color: red;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #66b2ff;
+      margin-bottom: 10px;
+    }
+
+    p.description {
+      color: #ccc;
+      font-size: 1rem;
+      margin-bottom: 30px;
+    }
+
+    .container {
+      background-color: #1a1a1a;
+      border-radius: 8px;
+      padding: 20px;
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    textarea {
+      width: 100%;
+      height: 200px;
+      padding: 15px;
+      border-radius: 6px;
+      border: 1px solid #3399ff;
+      resize: none;
+      background-color: #0d0d0d;
+      color: white;
+      font-size: 1rem;
+    }
+
+    button {
+      margin-top: 20px;
+      background-color: #e60000;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #cc0000;
+    }
+
+    footer {
+      margin-top: 60px;
+      color: #666;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+    <script>
+        async function checkPlagiarism() {
+            const text = document.getElementById("inputText").value;
+
+            const response = await fetch("http://localhost:8000/check_plagiarism", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ text: text })
+            });
+
+            const data = await response.json();
+            const resultsDiv = document.getElementById("results");
+
+            resultsDiv.innerHTML = "";
+            data.results.forEach(item => {
+                resultsDiv.innerHTML += `<p><a href="${item.url}" target="_blank">${item.url}</a> - Similarity: ${item.similarity}%</p>`;
+            });
+        }
+    </script>
+<body>
+  <div class="logo">Plagiarism<span>Detect</span></div>
+
+  <h1>AI-Powered Plagiarism Detection</h1>
+  <p class="description">
+    Our advanced AI system analyzes your content against multiple sources to detect<br />
+    similarities and ensure originality.
+  </p>
+
+  <div class="container">
+    <textarea placeholder="Paste your content here to check for plagiarism..."></textarea>
+    <button>ANALYZE CONTENT</button>
+  </div>
+
+  <footer>&copy; 2023 PlagiarismDetect. All rights reserved.</footer>
+</body>
+</html>
